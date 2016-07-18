@@ -1,15 +1,52 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <h1>Duet</h1>
-    <button onclick="play()">Play</button>
 
-    <script type="text/javascript">
-      
-    </script>
-  </body>
+<head>
+  <title>
+    <%= title %>
+  </title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+  <script src="javascripts/id3-min.js" type="text/javascript"></script>
+  <script src="javascripts/index.js" charset="utf-8"></script>
+</head>
+
+<body>
+  <h1>Duet</h1>
+  <button onclick="play()">Play</button>
+  <form>
+    <input type="file" id="file" onchange="load(this); alert(this);">
+  </form>
+
+  <script type="text/javascript">
+    function play() {
+      var audio = new Audio('javascripts/1.mp3');
+      audio.play();
+    }
+
+    ID3.loadTags("http://localhost:3000/javascripts/2.mp3", function() {
+      var tags = ID3.getAllTags("http://localhost:3000/javascripts/2.mp3");
+      console.log(tags.artist + " - " + tags.title + ", " + tags.album);
+      // console.log(tags.picture);
+      // var image = tags.picture;
+      // var base64String = "";
+      // for (var i = 0; i < image.data.length; i++) {
+      //   base64String += String.fromCharCode(image.data[i]);
+      // }
+      // var dataUrl = "data:" + image.format + ";base64," + window.btoa(base64String);
+      // document.getElementById('cover').src = "dataUrl";
+
+          var image = tags.image;
+          var base64String = "";
+          for (var i = 0; i < image.data.length; i++) {
+              base64String += String.fromCharCode(image.data[i]);
+          }
+    document.getElementById('art').src = "data:" + image.format + ";base64," + window.btoa(base64String);
+    document.getElementById('art').style.display = "block";
+    console.log(tags);
+
+    });
+  </script>
+  <img src="" id="art" alt="">
+</body>
+
 </html>
